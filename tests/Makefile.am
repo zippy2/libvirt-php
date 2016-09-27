@@ -1,4 +1,17 @@
+AM_CFLAGS = \
+	-I$(top_builddir) -I$(top_srcdir) \
+	-I$(top_builddir)/src -I$(top_srcdir)/src
+
+linktest_SOURCES = linktest.c
+linktest_CFLAGS =	\
+	$(AM_CFLAGS)
+linktest_LDADD = ../src/libvirt-php.la
+linktest_LDFLAGS = $(NULL)
+
 test_scripts = runtests.sh
+test_helpers = linktest
+
+noinst_PROGRAMS = $(test_helpers)
 
 TESTS = $(test_scripts)
 EXTRA_DIST = $(test_scripts) \
