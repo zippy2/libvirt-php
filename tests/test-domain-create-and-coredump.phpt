@@ -1,28 +1,50 @@
+--TEST--
+libvirt_domain_create_and_coredump
+--SKIPIF--
+<?php require_once('skipif.inc'); ?>
+--FILE--
 <?php
-	require_once('functions.phpt');
+require_once('functions.inc');
 
-	$conn = libvirt_connect('test:///default',  false);
-	if (!is_resource($conn))
-		bail('Connection to default hypervisor failed');
+echo "# libvirt_connect\n";
+var_dump($conn = libvirt_connect('test:///default',  false));
+if (!is_resource($conn))
+    die('Connection to default hypervisor failed');
 
-	$xml = file_get_contents($abs_srcdir.'/data/example-no-disk-and-media.xml');
+$xml = file_get_contents($abs_srcdir.'/data/example-no-disk-and-media.xml');
 
-	$res = libvirt_domain_create_xml($conn, $xml);
-	if (!is_resource($res))
-		bail('Domain definition failed with error: '.libvirt_get_last_error());
+echo "# libvirt_domain_create_xml\n";
+var_dump($res = libvirt_domain_create_xml($conn, $xml));
+if (!is_resource($res))
+    die('Domain definition failed with error: '.libvirt_get_last_error());
 
-	$name = tempnam(sys_get_temp_dir(), 'guestdumptest');
-	if (!libvirt_domain_core_dump($res, $name))
-		bail('Cannot dump core of the guest: '.libvirt_get_last_error());
+$name = tempnam(sys_get_temp_dir(), 'guestdumptest');
+echo "# libvirt_domain_core_dump\n";
+var_dump($ret = libvirt_domain_core_dump($res, $name));
+if (!$ret)
+    die('Cannot dump core of the guest: '.libvirt_get_last_error());
+var_dump(file_exists($name));
 
-	if (!libvirt_domain_destroy($res)) {
-		unlink($name);
-		bail('Domain destroy failed with error: '.libvirt_get_last_error());
-	}
+echo "# libvirt_domain_destroy\n";
+var_dump($ret = libvirt_domain_destroy($res));
+if (!$ret) {
+    unlink($name);
+    die('Domain destroy failed with error: '.libvirt_get_last_error());
+}
 
-	unset($res);
-	unset($conn);
-	unlink($name);
-
-	success( basename(__FILE__) );
+unset($res);
+unset($conn);
+unlink($name);
 ?>
+Done
+--EXPECTF--
+# libvirt_connect
+resource(%d) of type (Libvirt connection)
+# libvirt_domain_create_xml
+resource(%d) of type (Libvirt domain)
+# libvirt_domain_core_dump
+bool(true)
+bool(true)
+# libvirt_domain_destroy
+bool(true)
+Done

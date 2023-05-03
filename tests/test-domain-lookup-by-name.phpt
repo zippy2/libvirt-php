@@ -1,15 +1,16 @@
 --TEST--
-libvirt_domain_create_get_metadata
+libvirt_domain_lookup_by_name
 --SKIPIF--
 <?php require_once('skipif.inc'); ?>
 --FILE--
 <?php
 require_once('functions.inc');
 
+echo "# libvirt_connect\n";
 var_dump($conn = libvirt_connect('test:///default', false));
 if (!is_resource($conn))
     die('Connection to default hypervisor failed');
-
+// Loads domain of type 'test', name 'test-guest-no-disk-and-media'
 $xml = file_get_contents($abs_srcdir.'/data/example-no-disk-and-media.xml');
 
 echo "# libvirt_domain_create_xml\n";
@@ -17,25 +18,19 @@ var_dump($res = libvirt_domain_create_xml($conn, $xml));
 if (!is_resource($res))
     die('Domain definition failed with error: '.libvirt_get_last_error());
 
-echo "# libvirt_domain_get_metadata\n";
-var_dump($info = @libvirt_domain_get_metadata($res, VIR_DOMAIN_METADATA_DESCRIPTION, '', VIR_DOMAIN_AFFECT_CURRENT));
+echo "# libvirt_domain_lookup_by_name\n";
+var_dump($dom = libvirt_domain_lookup_by_name($conn, "test"));
 
-echo "# libvirt_domain_destroy\n";
-var_dump($ret = libvirt_domain_destroy($res));
-if (!$ret) {
-    die('Domain destroy failed with error: '.libvirt_get_last_error());
-}
-
+unset($dom);
 unset($res);
 unset($conn);
 ?>
 Done
 --EXPECTF--
-resource(5) of type (Libvirt connection)
+# libvirt_connect
+resource(%d) of type (Libvirt connection)
 # libvirt_domain_create_xml
-resource(8) of type (Libvirt domain)
-# libvirt_domain_get_metadata
-NULL
-# libvirt_domain_destroy
-bool(true)
+resource(%d) of type (Libvirt domain)
+# libvirt_domain_lookup_by_name
+resource(%d) of type (Libvirt domain)
 Done

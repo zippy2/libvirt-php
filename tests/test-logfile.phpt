@@ -1,9 +1,10 @@
 --TEST--
-libvirt_logfile_set
+libvirt_logfile
 --SKIPIF--
 <?php require_once('skipif.inc'); ?>
 --FILE--
 <?php
+require_once('functions.inc');
 
 $logfile = 'test.log';
 @unlink($logfile);
@@ -27,12 +28,11 @@ $log = fread($fp, filesize($logfile));
 fclose($fp);
 
 $logok = (strpos($log, 'libvirt_connect: Connection') &&
-	  strpos($log, 'libvirt_connection_dtor: virConnectClose'));
+    strpos($log, 'libvirt_connection_dtor: virConnectClose'));
 
 unlink($logfile);
 
 var_dump($logok);
-
 ?>
 Done
 --EXPECTF--

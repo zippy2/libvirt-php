@@ -21,6 +21,7 @@
 /tests/check_parameters.sh
 /tests/runtests.sh
 /tests/functions.phpt
+/tests/functions.inc
 /test-driver
 /AUTHORS
 /INSTALL

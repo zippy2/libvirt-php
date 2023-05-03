@@ -1,9 +1,10 @@
 --TEST--
-libvirt_connect_get_information
+libvirt_connect_get_info
 --SKIPIF--
 <?php require_once('skipif.inc'); ?>
 --FILE--
 <?php
+require_once('functions.inc');
 
 echo "# libvirt_connect\n";
 var_dump($conn = libvirt_connect('test:///default', false));
@@ -16,13 +17,13 @@ $res = libvirt_node_get_info($conn);
 
 if (!is_array($res)) {
     die("libvirt_node_get_info returned unexpected value: " . print_r($res, true) .
-	"\nFailed with error: ".libvirt_get_last_error());
+        "\nFailed with error: ".libvirt_get_last_error());
 }
 
 foreach (array('memory', 'cpus') as $k) {
     if (!array_key_exists($k, $res) || !is_numeric($res[$k])) {
-	die("libvirt_node_get_info: Absent or incorrect key \'$k\'. Value: " . print_r($res, true) .
-	    "\nFailed with error: ".libvirt_get_last_error());
+        die("libvirt_node_get_info: Absent or incorrect key \'$k\'. Value: " . print_r($res, true) .
+            "\nFailed with error: ".libvirt_get_last_error());
     }
 }
 
@@ -39,13 +40,13 @@ $counts = libvirt_domain_get_counts($conn);
 
 if (!is_array($counts)) {
     die("libvirt_domain_get_counts returned unexpected value: " . print_r($counts, true) .
-	"\nFailed with error: ".libvirt_get_last_error());
+        "\nFailed with error: ".libvirt_get_last_error());
 }
 
 foreach (array("total", "active", "inactive") as $k) {
     if (!array_key_exists($k, $counts) || !is_numeric($counts[$k])) {
-	die("libvirt_domain_get_counts: Absent or incorrect key \'$k\'. Value: " . print_r($counts, true) .
-	    "\nFailed with error: ".libvirt_get_last_error());
+        die("libvirt_domain_get_counts: Absent or incorrect key \'$k\'. Value: " . print_r($counts, true) .
+            "\nFailed with error: ".libvirt_get_last_error());
     }
 }
 
@@ -61,7 +62,7 @@ echo "# libvirt_connect_get_hypervisor\n";
 $res = libvirt_connect_get_hypervisor($conn);
 if (!is_array($res)) {
     die("libvirt_connect_get_hypervisor returned unexpected value: " . print_r($res, true) .
-	"\nFailed with error: ".libvirt_get_last_error());
+        "\nFailed with error: ".libvirt_get_last_error());
 }
 unset($res);
 
@@ -72,7 +73,7 @@ echo "# libvirt_connect_get_information\n";
 $res = @libvirt_connect_get_information($conn); // Need to suppress driver-dependent warning messages
 if (!is_array($res)) {
     die("libvirt_connect_get_information returned unexpected value: " . print_r($res, true) .
-	"\nFailed with error: ".libvirt_get_last_error());
+        "\nFailed with error: ".libvirt_get_last_error());
 }
 unset($res);
 
@@ -83,7 +84,6 @@ echo "# libvirt_connect_get_secure\n";
 var_dump(libvirt_connect_get_secure($conn) != -1);
 
 unset($conn);
-
 ?>
 Done
 --EXPECTF--

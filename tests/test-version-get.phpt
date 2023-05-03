@@ -1,8 +1,29 @@
+--TEST--
+libvirt_version_get
+--SKIPIF--
+<?php require_once('skipif.inc'); ?>
+--FILE--
 <?php
-	require_once('functions.phpt');
+require_once('functions.inc');
 
-	if (!is_array( libvirt_version() ) )
-		bail("Libvirt version doesn't return an array");
-
-	success( basename(__FILE__) );
+var_dump(libvirt_version());
 ?>
+Done
+--EXPECTF--
+array(7) {
+  ["libvirt.release"]=>
+  int(%d)
+  ["libvirt.minor"]=>
+  int(%d)
+  ["libvirt.major"]=>
+  int(%d)
+  ["connector.version"]=>
+  string(%d) "%s"
+  ["connector.major"]=>
+  int(%d)
+  ["connector.minor"]=>
+  int(%d)
+  ["connector.release"]=>
+  int(%d)
+}
+Done

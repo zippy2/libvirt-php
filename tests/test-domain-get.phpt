@@ -1,9 +1,10 @@
 --TEST--
-libvirt_domain_get_xml
+libvirt_domain_get
 --SKIPIF--
 <?php require_once('skipif.inc'); ?>
 --FILE--
 <?php
+require_once('functions.inc');
 
 echo "# libvirt_connect\n";
 var_dump($conn = libvirt_connect('test:///default',  false));
@@ -11,7 +12,7 @@ if (!is_resource($conn))
     die('Connection to default hypervisor failed');
 
 // We need a running domain to be able to pull the id
-$xml = file_get_contents(__DIR__.'/example-no-disk-and-media.xml');
+$xml = file_get_contents($abs_srcdir.'/data/example-no-disk-and-media.xml');
 echo "# libvirt_domain_create_xml\n";
 var_dump($dom = libvirt_domain_create_xml($conn, $xml));
 if (!is_resource($dom)) {
@@ -51,7 +52,7 @@ echo "# libvirt_domain_get_xml_desc\n";
 $xmlstr = libvirt_domain_get_xml_desc($dom);
 
 $xmlok = (strpos($xmlstr, "<name>{$dom_name}</name>") &&
-          strpos($xmlstr, "<uuid>{$dom_uuid_str}</uuid>"));
+    strpos($xmlstr, "<uuid>{$dom_uuid_str}</uuid>"));
 var_dump($xmlok);
 
 echo "# libvirt_domain_shutdown\n";

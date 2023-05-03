@@ -1,11 +1,16 @@
+--TEST--
+libvirt_connect
+--SKIPIF--
+<?php require_once('skipif.inc'); ?>
+--FILE--
 <?php
-	require_once('functions.phpt');
+require_once('functions.inc');
 
-	$conn = libvirt_connect('test:///default');
-	if (!is_resource($conn))
-		bail('Connection to default hypervisor failed');
-
-	unset($conn);
-
-	success( basename(__FILE__) );
+$conn = libvirt_connect('test:///default');
+var_dump($conn);
+unset($conn);
 ?>
+Done
+--EXPECTF--
+resource(%d) of type (Libvirt connection)
+Done

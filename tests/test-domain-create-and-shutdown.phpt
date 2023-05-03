@@ -1,12 +1,13 @@
 --TEST--
-libvirt_domain_create_get_metadata
+libvirt_domain_create_and_shutdown
 --SKIPIF--
 <?php require_once('skipif.inc'); ?>
 --FILE--
 <?php
 require_once('functions.inc');
 
-var_dump($conn = libvirt_connect('test:///default', false));
+echo "# libvirt_connect\n";
+var_dump($conn = libvirt_connect('test:///default',  false));
 if (!is_resource($conn))
     die('Connection to default hypervisor failed');
 
@@ -17,13 +18,10 @@ var_dump($res = libvirt_domain_create_xml($conn, $xml));
 if (!is_resource($res))
     die('Domain definition failed with error: '.libvirt_get_last_error());
 
-echo "# libvirt_domain_get_metadata\n";
-var_dump($info = @libvirt_domain_get_metadata($res, VIR_DOMAIN_METADATA_DESCRIPTION, '', VIR_DOMAIN_AFFECT_CURRENT));
-
-echo "# libvirt_domain_destroy\n";
-var_dump($ret = libvirt_domain_destroy($res));
+echo "# libvirt_domain_shutdown\n";
+var_dump($ret = libvirt_domain_shutdown($res));
 if (!$ret) {
-    die('Domain destroy failed with error: '.libvirt_get_last_error());
+    die('Domain shutdown failed with error: '.libvirt_get_last_error());
 }
 
 unset($res);
@@ -31,11 +29,10 @@ unset($conn);
 ?>
 Done
 --EXPECTF--
-resource(5) of type (Libvirt connection)
+# libvirt_connect
+resource(%d) of type (Libvirt connection)
 # libvirt_domain_create_xml
-resource(8) of type (Libvirt domain)
-# libvirt_domain_get_metadata
-NULL
-# libvirt_domain_destroy
+resource(%d) of type (Libvirt domain)
+# libvirt_domain_shutdown
 bool(true)
 Done

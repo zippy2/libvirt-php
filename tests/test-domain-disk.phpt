@@ -1,9 +1,12 @@
 --TEST--
 libvirt_domain_disk
 --SKIPIF--
-<?php require_once('skipif.inc'); ?>
+<?php require_once('skipif_qemu.inc'); ?>
+--CONFLICTS--
+all
 --FILE--
 <?php
+require_once('functions.inc');
 
 $disk_devname = 'hda'; // Disk that will be added to existing guest config
 $disk_devtype = 'ide';
@@ -24,7 +27,7 @@ if (!is_resource($conn))
     die('Connection to default hypervisor failed. Is libvirt started? What about the QEMU driver?');
 
 // libvirt_domain_disk_add needs a persistent guest loaded from a file
-$xml = file_get_contents(__DIR__.'/qemu-no-disk-and-media.xml');
+$xml = file_get_contents($abs_srcdir.'/data/qemu-no-disk-and-media.xml');
 echo "# libvirt_domain_define_xml\n";
 var_dump($dom = libvirt_domain_define_xml($conn, $xml));
 if (!is_resource($dom)) {
@@ -51,7 +54,6 @@ if (!$ret) {
 
 unset($dom);
 unset($conn);
-
 ?>
 Done
 --EXPECTF--

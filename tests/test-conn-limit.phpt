@@ -1,27 +1,49 @@
+--TEST--
+INI: libvirt.max_connections
+--SKIPIF--
+<?php require_once('skipif.inc'); ?>
+--INI--
+libvirt.max_connections=3
+--FILE--
 <?php
-	require_once('functions.phpt');
+require_once('functions.inc');
 
-	ob_start();
-	PHPInfo();
-	$s = ob_get_contents();
-	ob_end_clean();
+$num_ini = ini_get("libvirt.max_connections");
+var_dump($num_ini);
 
-	$s = strstr($s, 'Max. connections =>');
-	$tmp = explode("\n", $s);
-	$tmp = explode('=>', $tmp[0]);
-	$num_ini = (int)$tmp[1];
+$num = $num_ini + 1;
 
-	$num = $num_ini + 1;
+for ($i = 0; $i < $num; $i++)
+    $conn[] = libvirt_connect('test:///default', false);
+var_dump($conn);
 
-	for ($i = 0; $i < $num; $i++)
-		$conn[] = @libvirt_connect('test:///default', false);
+$tmp = libvirt_print_binding_resources();
+var_dump($tmp);
 
-	$tmp = libvirt_print_binding_resources();
-	if (sizeof($tmp) > $num_ini)
-		bail('Allocated '.sizeof($tmp).' connection resources but limits seems to be set to '.$num_ini.' resources');
-
-	for ($i = 0; $i < $num; $i++)
-		unset($conn[$i]);
-
-	success( basename(__FILE__) );
+for ($i = 0; $i < $num; $i++)
+    unset($conn[$i]);
 ?>
+Done
+--EXPECTF--
+string(1) "3"
+
+%s Maximum number of connections allowed exceeded %s
+array(4) {
+  [0]=>
+  resource(%d) of type (Libvirt connection)
+  [1]=>
+  resource(%d) of type (Libvirt connection)
+  [2]=>
+  resource(%d) of type (Libvirt connection)
+  [3]=>
+  bool(false)
+}
+array(3) {
+  [0]=>
+  string(%d) "Libvirt connection resource at %s"
+  [1]=>
+  string(%d) "Libvirt connection resource at %s"
+  [2]=>
+  string(%d) "Libvirt connection resource at %s"
+}
+Done
