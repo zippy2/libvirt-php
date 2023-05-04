@@ -1,5 +1,4 @@
 test_scripts = \
-	runtests.sh \
 	check_parameters.sh \
 	test-conn-limit.phpt \
 	test-connect-get-capabilities.phpt \
@@ -19,6 +18,7 @@ test_scripts = \
 	test-domain-get.phpt \
 	test-domain-lookup-by-name.phpt \
 	test-domain-nic.phpt \
+	test-domain-snapshot.phpt \
 	test-get-emulator.phpt \
 	test-get-models-unsupported-hw.phpt \
 	test-get-models.phpt \
@@ -37,10 +37,8 @@ EXTRA_DIST = \
 	functions.inc.in \
 	php.ini \
 	run-tests.php \
-	runtests-report.sh \
 	skipif.inc \
-	skipif_qemu.inc \
-	test-domain-snapshot.phpt
+	skipif_qemu.inc
 
 functions.inc: functions.inc.in
 	$(AM_V_GEN) sed -e 's|[@]abs_srcdir[@]|$(abs_srcdir)|g' \
