@@ -23,8 +23,6 @@ if (!is_resource($dom)) {
 }
 
 echo "# libvirt_domain_nic_add\n";
-// The doc is wrong. It says the function returns a domain resource.
-// It actually returns a boolean!
 var_dump($ret = libvirt_domain_nic_add($dom, $mac, $network, $model, 0));
 if (!$ret) {
     die('Domain nic add failed with error: '.libvirt_get_last_error());

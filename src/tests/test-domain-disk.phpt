@@ -32,8 +32,6 @@ if (!is_resource($dom)) {
 }
 
 echo "# libvirt_domain_disk_add\n";
-// The doc is a wrong. It says the function returns a domain resource.
-// It actually returns a boolean!
 var_dump($ret = libvirt_domain_disk_add($dom, $disk_image, $disk_devname, $disk_devtype, $disk_iodriver, 0));
 if (!$ret) {
     die('Domain disk add failed with error: '.libvirt_get_last_error());

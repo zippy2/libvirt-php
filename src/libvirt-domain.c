@@ -646,7 +646,7 @@ PHP_FUNCTION(libvirt_domain_change_boot_devices)
  *                  @typ [string]: bus type for the device in the guest, usually 'ide' or 'scsi'
  *                  @driver [string]: driver type to be specified, like 'raw' or 'qcow2'
  *                  @flags [int]: flags for getting the XML description
- * Returns:         new domain resource
+ * Returns:         TRUE for success, FALSE on error.
  */
 PHP_FUNCTION(libvirt_domain_disk_add)
 {
@@ -747,7 +747,7 @@ PHP_FUNCTION(libvirt_domain_disk_add)
  * Arguments:       @res [resource]: libvirt domain resource
  *                  @dev [string]: string for the device to be removed from the guest (e.g. 'hdb')
  *                  @flags [int]: flags for getting the XML description
- * Returns:         new domain resource
+ * Returns:         TRUE for success, FALSE on error.
  */
 PHP_FUNCTION(libvirt_domain_disk_remove)
 {
@@ -816,7 +816,7 @@ PHP_FUNCTION(libvirt_domain_disk_remove)
  *                  @network [string]: network name where to connect this NIC
  *                  @model [string]: string of the NIC model
  *                  @flags [int]: flags for getting the XML description
- * Returns:         new domain resource
+ * Returns:         TRUE for success, FALSE on error.
  */
 PHP_FUNCTION(libvirt_domain_nic_add)
 {
@@ -914,7 +914,7 @@ PHP_FUNCTION(libvirt_domain_nic_add)
  * Arguments:       @res [resource]: libvirt domain resource
  *                  @dev [string]: string representation of the IP address to be removed (e.g. 54:52:00:xx:yy:zz)
  *                  @flags [int]: optional flags for getting the XML description
- * Returns:         new domain resource
+ * Returns:         TRUE for success, FALSE on error.
  */
 PHP_FUNCTION(libvirt_domain_nic_remove)
 {
