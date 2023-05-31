@@ -6,21 +6,20 @@ INI: libvirt.max_connections
 libvirt.max_connections=3
 --FILE--
 <?php
+$num_ini = ini_get("libvirt.max_connections");
+var_dump($num_ini);
 
-    $num_ini = ini_get("libvirt.max_connections");
-    var_dump($num_ini);
+$num = $num_ini + 1;
 
-	$num = $num_ini + 1;
+for ($i = 0; $i < $num; $i++)
+    $conn[] = libvirt_connect('test:///default', false);
+var_dump($conn);
 
-	for ($i = 0; $i < $num; $i++)
-		$conn[] = libvirt_connect('test:///default', false);
-    var_dump($conn);
+$tmp = libvirt_print_binding_resources();
+var_dump($tmp);
 
-	$tmp = libvirt_print_binding_resources();
-    var_dump($tmp);
-
-	for ($i = 0; $i < $num; $i++)
-		unset($conn[$i]);
+for ($i = 0; $i < $num; $i++)
+    unset($conn[$i]);
 ?>
 Done
 --EXPECTF--

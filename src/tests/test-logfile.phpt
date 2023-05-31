@@ -4,13 +4,12 @@ libvirt_logfile_set
 <?php require_once('skipif.inc'); ?>
 --FILE--
 <?php
-
 $logfile = 'test.log';
 @unlink($logfile);
 
 echo "# libvirt_logfile_set\n";
 if (!libvirt_logfile_set($logfile, 1)) {
-    die('Logfile set failed with error: '.libvirt_get_last_error());
+    die('Logfile set failed with error: ' . libvirt_get_last_error());
 }
 
 echo "# libvirt_connect\n";
@@ -27,12 +26,11 @@ $log = fread($fp, filesize($logfile));
 fclose($fp);
 
 $logok = (strpos($log, 'libvirt_connect: Connection') &&
-	  strpos($log, 'libvirt_connection_dtor: virConnectClose'));
+    strpos($log, 'libvirt_connection_dtor: virConnectClose'));
 
 unlink($logfile);
 
 var_dump($logok);
-
 ?>
 Done
 --EXPECTF--

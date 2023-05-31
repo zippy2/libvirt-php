@@ -4,18 +4,17 @@ libvirt_domain_get_xml
 <?php require_once('skipif.inc'); ?>
 --FILE--
 <?php
-
 echo "# libvirt_connect\n";
 var_dump($conn = libvirt_connect('test:///default',  false));
 if (!is_resource($conn))
     die('Connection to default hypervisor failed');
 
 // We need a running domain to be able to pull the id
-$xml = file_get_contents(__DIR__.'/example-no-disk-and-media.xml');
+$xml = file_get_contents(__DIR__ . '/example-no-disk-and-media.xml');
 echo "# libvirt_domain_create_xml\n";
 var_dump($dom = libvirt_domain_create_xml($conn, $xml));
 if (!is_resource($dom)) {
-    die('Domain definition failed with error: '.libvirt_get_last_error());
+    die('Domain definition failed with error: ' . libvirt_get_last_error());
 }
 
 echo "# libvirt_domain_get_name\n";
@@ -33,14 +32,14 @@ var_dump($dom_id = libvirt_domain_get_id($dom));
 echo "# libvirt_domain_lookup_by_uuid_string\n";
 var_dump($dom2 = libvirt_domain_lookup_by_uuid_string($conn, $dom_uuid_str));
 if (!is_resource($dom2)) {
-    die('Domain lookup by UUID string failed with error: '.libvirt_get_last_error());
+    die('Domain lookup by UUID string failed with error: ' . libvirt_get_last_error());
 }
 unset($dom2);
 
 echo "# libvirt_domain_lookup_by_id\n";
 var_dump($dom2 = libvirt_domain_lookup_by_id($conn, $dom_id));
 if (!is_resource($dom2)) {
-    die('Domain lookup by ID failed with error: '.libvirt_get_last_error());
+    die('Domain lookup by ID failed with error: ' . libvirt_get_last_error());
 }
 unset($dom2);
 
@@ -51,13 +50,13 @@ echo "# libvirt_domain_get_xml_desc\n";
 $xmlstr = libvirt_domain_get_xml_desc($dom);
 
 $xmlok = (strpos($xmlstr, "<name>{$dom_name}</name>") &&
-          strpos($xmlstr, "<uuid>{$dom_uuid_str}</uuid>"));
+    strpos($xmlstr, "<uuid>{$dom_uuid_str}</uuid>"));
 var_dump($xmlok);
 
 echo "# libvirt_domain_shutdown\n";
 var_dump($ret = libvirt_domain_shutdown($dom));
 if (!$ret) {
-    die('Domain shutdown failed with error: '.libvirt_get_last_error());
+    die('Domain shutdown failed with error: ' . libvirt_get_last_error());
 }
 
 unset($res);

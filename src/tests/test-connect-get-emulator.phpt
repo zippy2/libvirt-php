@@ -4,9 +4,9 @@ libvirt_connect_get_emulator
 <?php require_once('skipif.inc'); ?>
 --FILE--
 <?php
-	$conn = libvirt_connect('test:///default');
-    var_dump(libvirt_connect_get_emulator($conn));
-	unset($conn);
+$conn = libvirt_connect('test:///default');
+var_dump(libvirt_connect_get_emulator($conn));
+unset($conn);
 ?>
 Done
 --EXPECTF--

@@ -4,19 +4,18 @@ libvirt_connect_get_capabilities
 <?php require_once('skipif.inc'); ?>
 --FILE--
 <?php
+echo "# libvirt_connect\n";
+var_dump($conn = libvirt_connect('test:///default', false));
+if (!is_resource($conn))
+    die('Connection to default hypervisor failed');
 
-	echo "# libvirt_connect\n";
-	var_dump($conn = libvirt_connect('test:///default', false));
-	if (!is_resource($conn))
-		die('Connection to default hypervisor failed');
+echo "# libvirt_connect_get_capabilities\n";
+var_dump($res = libvirt_connect_get_emulator($conn));
+if (!$res) {
+    die('Connect get capabilities failed with error: ' . libvirt_get_last_error());
+}
 
-	echo "# libvirt_connect_get_capabilities\n";
-	var_dump($res = libvirt_connect_get_emulator($conn));
-	if (!$res) {
-		die('Connect get capabilities failed with error: '.libvirt_get_last_error());
-	}
-
-	unset($conn);
+unset($conn);
 ?>
 Done
 --EXPECTF--
