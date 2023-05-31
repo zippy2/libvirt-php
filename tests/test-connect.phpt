@@ -1,11 +1,11 @@
 <?php
-	require_once('functions.phpt');
+require_once('functions.phpt');
 
-	$conn = libvirt_connect('test:///default');
-	if (!is_resource($conn))
-		bail('Connection to default hypervisor failed');
+$conn = libvirt_connect('test:///default');
+if (!is_resource($conn))
+    bail('Connection to default hypervisor failed');
 
-	unset($conn);
+unset($conn);
 
-	success( basename(__FILE__) );
+success(basename(__FILE__));
 ?>
