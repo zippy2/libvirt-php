@@ -213,8 +213,10 @@ function check_function($name, $txt, $offset)
             $last_char = '';
             $j = -1;
 
+
             $spec = $m[1][0];
             $len = strlen($spec);
+            $expected = 0;
             for ($i = 0; $i < $len; ++$i) {
                 $char = $spec[$i];
                 switch ($char = $spec[$i]) {
@@ -241,6 +243,7 @@ function check_function($name, $txt, $offset)
                     case '!':
                         if (in_array($last_char, array('l', 'L', 'd', 'b'))) {
                             check_param($params, ++$j, 'bool*', $optional);
+                            $expected++;
                         }
                     break;
 
@@ -253,6 +256,7 @@ function check_function($name, $txt, $offset)
                             check_param($params, ++$j, 'zval**', $optional);
                             check_param($params, ++$j, 'int*', $optional);
                             $varargs = true;
+                            $expected += 2;
                         }
                     break;
 
@@ -260,6 +264,7 @@ function check_function($name, $txt, $offset)
                     case 'p':
                         check_param($params, ++$j, 'char**', $optional, $allow_uninit=true);
                         check_param($params, ++$j, 'size_t*', $optional, $allow_uninit=true);
+                        $expected += 2;
                         if ($optional && !$params[$j-1][2] && !$params[$j][2]
                                 && $params[$j-1][0] !== '**dummy**' && $params[$j][0] !== '**dummy**') {
                             error("one of optional vars {$params[$j-1][0]} or {$params[$j][0]} must be initialized", 1);
@@ -269,6 +274,7 @@ function check_function($name, $txt, $offset)
                     case 'C':
                         // C must always be initialized, independently of whether it's optional
                         check_param($params, ++$j, 'zend_class_entry**', false);
+                        $expected++;
                     break;
 
                     default:
@@ -283,10 +289,16 @@ function check_function($name, $txt, $offset)
 
                         foreach ($API_params[$char] as $exp) {
                             check_param($params, ++$j, $exp, $optional, $allow_uninit);
+                            $expected++;
                         }
                 }
 
                 $last_char = $char;
+            }
+
+            $seen = count($params);
+            if ($seen != $expected) {
+                error("Too much arguments. Expected {$expected}, got {$seen}");
             }
         }
     }
